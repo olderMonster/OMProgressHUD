@@ -26,6 +26,7 @@ Pod::Spec.new do |s|
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
                    一个简单的视图加载显示器，可以显示loading状态，也可以显示提示文本。
+                   DESC
 
   s.homepage     = "https://github.com/olderMonster/OMProgressHUD"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
