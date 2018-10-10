@@ -8,10 +8,11 @@
 
 #import "OMProgressHUD.h"
 
+static OMProgressHUD *defaultView = nil;
 @interface OMProgressHUD()
 
-@property (nonatomic , strong)UIImageView *loadingImageView;
-@property (nonatomic , strong)UIImageView *centerImageView;
+@property (nonatomic , strong)UIView *contentView;
+@property (nonatomic , strong)CAShapeLayer *loadingLayer;
 @property (nonatomic , strong)UILabel *messageLabel;
 
 @end
@@ -20,10 +21,9 @@
 
 
 + (instancetype)defaultView{
-    static OMProgressHUD *defaultView = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        defaultView = [[OMProgressHUD alloc] initWithFrame:CGRectMake(0,0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+        defaultView = [[self alloc] init];
     });
     return defaultView;
 }
@@ -33,11 +33,6 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        
-        [self addSubview:self.centerImageView];
-        [self addSubview:self.loadingImageView];
-        self.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.0];
-        
     }
     return self;
 }
@@ -45,11 +40,6 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    
-    CGFloat width = 80;
-    self.centerImageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * 0.5 - width * 0.5, [UIScreen mainScreen].bounds.size.height * 0.5 - width * 0.5 - 64, width, width);
-    self.loadingImageView.bounds = CGRectMake(0, 0, width * 0.6, width * 0.6);
-    self.loadingImageView.center = self.centerImageView.center;
     
 }
 
@@ -73,33 +63,25 @@
     //动画
     CABasicAnimation* rotationAnimation;
     rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotationAnimation.toValue = [NSNumber numberWithFloat: -M_PI * 2.0 ];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 ];
     rotationAnimation.duration = 0.8;
     rotationAnimation.cumulative = YES;
     rotationAnimation.repeatCount = ULLONG_MAX;
-    [self.loadingImageView.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+    [self.loadingLayer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
     
 }
 
 
 - (void)endLoadAnimation{
-    [self.loadingImageView.layer removeAllAnimations];
+    [self.loadingLayer removeAllAnimations];
 }
 
 #pragma mark -- public method
 + (void)show{
-    
-    [OMProgressHUD defaultView].loadingImageView.hidden = NO;
-    [OMProgressHUD defaultView].centerImageView.hidden = NO;
-    [OMProgressHUD defaultView].messageLabel.hidden = NO;
-    [[OMProgressHUD defaultView] setFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-    [[OMProgressHUD defaultView] setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.3]];
-    UIWindow *window = [[OMProgressHUD defaultView] frontWindow];
-    if (window) {
-        [window addSubview:[OMProgressHUD defaultView]];
-        [[OMProgressHUD defaultView] beginLoadAnimation];
-    }
-   
+    dispatch_async(dispatch_get_main_queue(), ^{
+        OMProgressHUD *progressHUD = [OMProgressHUD defaultView];
+        [progressHUD showLoading];
+    });
 }
 
 + (void)dismiss{
@@ -172,21 +154,58 @@
 }
 
 
-#pragma mark -- getters and setters
-- (UIImageView *)loadingImageView{
-    if (_loadingImageView == nil) {
-        _loadingImageView = [[UIImageView alloc] init];
-        _loadingImageView.image = [UIImage imageNamed:@"loading_icon"];
+- (void)showLoading{
+    OMProgressHUD *progressHUD = [OMProgressHUD defaultView];
+    progressHUD.frame = [UIScreen mainScreen].bounds;
+    progressHUD.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+    
+    UIView *contentView = progressHUD.contentView;
+    contentView.backgroundColor = [UIColor whiteColor];
+    contentView.layer.masksToBounds = YES;
+    contentView.layer.cornerRadius = 3.0f;
+    contentView.bounds = CGRectMake(0, 0, 80, 80);
+    contentView.center = CGPointMake(progressHUD.bounds.size.width * 0.5, progressHUD.bounds.size.height * 0.5);
+    contentView.hidden = NO;
+    [progressHUD addSubview:contentView];
+
+    CGPoint layerPoint = CGPointMake(contentView.bounds.size.width * 0.5, contentView.bounds.size.height * 0.5);
+    CGFloat radius = contentView.bounds.size.width * 0.5 * 0.6;
+    CGFloat startAngle = 0;
+    CGFloat endAngle = -M_PI * 3/2;
+    CGFloat lineWidth = 3;
+
+    UIBezierPath *circle = [UIBezierPath bezierPathWithArcCenter:layerPoint radius:radius startAngle:startAngle endAngle:endAngle clockwise:NO];
+    CAShapeLayer *circleLayer = [CAShapeLayer layer];
+    circleLayer.strokeColor = [UIColor redColor].CGColor;
+    circleLayer.lineWidth = lineWidth;
+    circleLayer.fillColor = [UIColor clearColor].CGColor;
+    circleLayer.path = circle.CGPath;
+    circleLayer.frame = contentView.bounds;
+    [contentView.layer addSublayer:circleLayer];
+
+    progressHUD.contentView = contentView;
+    progressHUD.loadingLayer = circleLayer;
+
+    progressHUD.messageLabel.hidden = YES;
+    
+    
+    UIWindow *window = [[OMProgressHUD defaultView] frontWindow];
+    if (window) {
+        [window addSubview:progressHUD];
+        [progressHUD beginLoadAnimation];
     }
-    return _loadingImageView;
 }
 
-- (UIImageView *)centerImageView{
-    if (_centerImageView == nil) {
-        _centerImageView = [[UIImageView alloc] init];
-        _centerImageView.image = [UIImage imageNamed:@"loading_bg"];
+
+#pragma mark -- getters and setters
+- (UIView *)contentView{
+    if (_contentView == nil) {
+        _contentView = [[UIView alloc] init];
+        _contentView.backgroundColor = [UIColor whiteColor];
+        _contentView.layer.masksToBounds = YES;
+        _contentView.layer.cornerRadius = 3.0;
     }
-    return _centerImageView;
+    return _contentView;
 }
 
 
