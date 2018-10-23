@@ -177,7 +177,7 @@ static OMProgressHUD *defaultView = nil;
     [progressHUD.loadingLayer removeFromSuperlayer];
     UIBezierPath *circle = [UIBezierPath bezierPathWithArcCenter:layerPoint radius:radius startAngle:startAngle endAngle:endAngle clockwise:NO];
     CAShapeLayer *circleLayer = [CAShapeLayer layer];
-    circleLayer.strokeColor = [UIColor redColor].CGColor;
+    circleLayer.strokeColor = [UIColor colorWithRed:78/255.0 green:173/255.0 blue:222/255.0 alpha:1.0].CGColor;
     circleLayer.lineWidth = lineWidth;
     circleLayer.fillColor = [UIColor clearColor].CGColor;
     circleLayer.path = circle.CGPath;
