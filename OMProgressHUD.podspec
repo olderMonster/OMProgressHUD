@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "OMProgressHUD"
-  s.version      = "1.0.0"
+  s.version      = "1.0.1"
   s.summary      = "加载显示器"
 
   # This description is used to generate tags and improve search results.
