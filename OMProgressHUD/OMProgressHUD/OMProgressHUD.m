@@ -481,13 +481,25 @@ static OMProgressHUD *defaultView = nil;
     [contentView addSubview:loadingTextLabel];
     
     //加载文本高度
-    CGFloat loadingTextHeight = config.loadingTextFont.pointSize + 2;
+    UIEdgeInsets loadTextEdgeInsets = UIEdgeInsetsMake(0, 10, 20, 10);
+    CGFloat loadingTextWidth = contentView.bounds.size.width - loadTextEdgeInsets.left - loadTextEdgeInsets.right;
+    CGFloat loadingTextHeight = config.loadingTextFont.pointSize;
+    if (loadingText.length > 0) {
+        CGRect rect = [loadingText boundingRectWithSize:CGSizeMake(loadingTextWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:loadingTextLabel.font} context:nil];
+        loadingTextHeight = rect.size.height;
+    }
+    
     //加载图片+图片与文本间距+文本高度
     CGFloat contentHeight = config.loadingImageSize.height + config.interLoadingImageTextSpacing + loadingTextHeight;
+    if (contentHeight > contentView.bounds.size.height - 20 - loadTextEdgeInsets.bottom) {
+        contentView.bounds = CGRectMake(0, 0, config.loadingContentSize.width, contentHeight + 20 + loadTextEdgeInsets.bottom);
+    }
+//    //加载图片+图片与文本间距+文本高度
+//    CGFloat contentHeight = config.loadingImageSize.height + config.interLoadingImageTextSpacing + loadingTextHeight;
     //计算图片Y轴位置
     CGFloat loadingImageViewY = contentView.bounds.size.height * 0.5 - contentHeight * 0.5;
     loadingImageView.frame = CGRectMake(contentView.bounds.size.width * 0.5 - config.loadingImageSize.width * 0.5, loadingImageViewY, config.loadingImageSize.width, config.loadingImageSize.height);
-    loadingTextLabel.frame = CGRectMake(0, CGRectGetMaxY(loadingImageView.frame) + config.interLoadingImageTextSpacing, contentView.bounds.size.width, loadingTextHeight);
+    loadingTextLabel.frame = CGRectMake(loadTextEdgeInsets.left, CGRectGetMaxY(loadingImageView.frame) + config.interLoadingImageTextSpacing, loadingTextWidth, loadingTextHeight);
 
     
     UIWindow *window = [[OMProgressHUD defaultView] frontWindow];
@@ -524,6 +536,8 @@ static OMProgressHUD *defaultView = nil;
         _loadingTextLabel.textColor = config.loadingTextColor;
         _loadingTextLabel.font = config.loadingTextFont;
         _loadingTextLabel.textAlignment = NSTextAlignmentCenter;
+        _loadingTextLabel.numberOfLines = 0;
+        [_loadingTextLabel sizeToFit];
     }
     return _loadingTextLabel;
 }
