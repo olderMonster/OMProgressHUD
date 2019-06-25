@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5759C9502260273100264C12 /* OMProgressConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 5759C94F2260273100264C12 /* OMProgressConfig.m */; };
-		579498412260696E003A0FB6 /* progress_icon_loading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5794983E2260696E003A0FB6 /* progress_icon_loading@2x.png */; };
-		579498422260696E003A0FB6 /* progress_icon_loading@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5794983F2260696E003A0FB6 /* progress_icon_loading@3x.png */; };
-		579498432260696E003A0FB6 /* progress_icon_loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 579498402260696E003A0FB6 /* progress_icon_loading.png */; };
 		579BAEE02162F41E00AEC627 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 579BAEDF2162F41E00AEC627 /* AppDelegate.m */; };
 		579BAEE32162F41E00AEC627 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 579BAEE22162F41E00AEC627 /* ViewController.m */; };
 		579BAEE62162F41E00AEC627 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 579BAEE42162F41E00AEC627 /* Main.storyboard */; };
@@ -23,9 +20,6 @@
 /* Begin PBXFileReference section */
 		5759C94E2260273100264C12 /* OMProgressConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OMProgressConfig.h; sourceTree = "<group>"; };
 		5759C94F2260273100264C12 /* OMProgressConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OMProgressConfig.m; sourceTree = "<group>"; };
-		5794983E2260696E003A0FB6 /* progress_icon_loading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "progress_icon_loading@2x.png"; sourceTree = "<group>"; };
-		5794983F2260696E003A0FB6 /* progress_icon_loading@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "progress_icon_loading@3x.png"; sourceTree = "<group>"; };
-		579498402260696E003A0FB6 /* progress_icon_loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = progress_icon_loading.png; sourceTree = "<group>"; };
 		579BAEDB2162F41E00AEC627 /* OMProgressHUD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OMProgressHUD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		579BAEDE2162F41E00AEC627 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		579BAEDF2162F41E00AEC627 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -87,9 +81,6 @@
 		579BAEF42162F44000AEC627 /* OMProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
-				579498402260696E003A0FB6 /* progress_icon_loading.png */,
-				5794983E2260696E003A0FB6 /* progress_icon_loading@2x.png */,
-				5794983F2260696E003A0FB6 /* progress_icon_loading@3x.png */,
 				579BAEF62162F44000AEC627 /* OMProgressHUD.h */,
 				579BAEF52162F44000AEC627 /* OMProgressHUD.m */,
 				5759C94E2260273100264C12 /* OMProgressConfig.h */,
@@ -158,9 +149,6 @@
 				579BAEEB2162F41F00AEC627 /* LaunchScreen.storyboard in Resources */,
 				579BAEE82162F41F00AEC627 /* Assets.xcassets in Resources */,
 				579BAEE62162F41E00AEC627 /* Main.storyboard in Resources */,
-				579498412260696E003A0FB6 /* progress_icon_loading@2x.png in Resources */,
-				579498432260696E003A0FB6 /* progress_icon_loading.png in Resources */,
-				579498422260696E003A0FB6 /* progress_icon_loading@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

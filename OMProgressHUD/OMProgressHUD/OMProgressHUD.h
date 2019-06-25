@@ -30,11 +30,6 @@
  */
 + (void)showImageLoading:(NSString *)loadingText;
 
-/**
- 取消loading
- */
-+ (void)dismiss;
-
 
 /**
  显示提示文本
@@ -43,6 +38,29 @@
  */
 + (void)show:(NSString *)message;
 
+
+/**
+ 带图显示文本信息
+ 
+ @param text 文本信息
+ @param image 图片
+ @param size 图片的显示尺寸
+ */
++ (void)show:(NSString *)text image:(UIImage *)image imageSize:(CGSize)size;
+
+
+/**
+ 带图显示文本信息。此时图片尺寸默认为(46,46)
+
+ @param text 文本信息
+ */
++ (void)showPicToast:(NSString *)text image:(UIImage *)image;
+
+
+/**
+ 取消loading
+ */
++ (void)dismiss;
 
 
 @end

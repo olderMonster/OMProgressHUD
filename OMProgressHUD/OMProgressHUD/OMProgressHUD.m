@@ -171,13 +171,13 @@ static OMProgressHUD *defaultView = nil;
             CGRect rect = [message boundingRectWithSize:CGSizeMake(textMaxW, maxH) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:label.font} context:nil];
             size = CGSizeMake(textMaxW, rect.size.height + textEdgeInsets.top + textEdgeInsets.bottom);
         }
-        if ([OMProgressConfig sharedInstance].position == OMProgressHudTextPositionBottom) {
+        if ([OMProgressConfig sharedInstance].toastPosition == OMToastVerticalPositionBottom) {
             label.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - size.width) * 0.5, [UIScreen mainScreen].bounds.size.height - [OMProgressConfig sharedInstance].tailSpacing - size.height, size.width, size.height);
         }
-        if ([OMProgressConfig sharedInstance].position == OMProgressHudTextPositionTop) {
+        if ([OMProgressConfig sharedInstance].toastPosition == OMToastVerticalPositionTop) {
             label.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - size.width) * 0.5, [OMProgressConfig sharedInstance].tailSpacing, size.width, size.height);
         }
-        if ([OMProgressConfig sharedInstance].position == OMProgressHudTextPositionMiddle) {
+        if ([OMProgressConfig sharedInstance].toastPosition == OMToastVerticalPositionCenter) {
             label.bounds = CGRectMake(0, 0, size.width, size.height);
             label.center = CGPointMake([UIScreen mainScreen].bounds.size.width * 0.5, [UIScreen mainScreen].bounds.size.height * 0.5);
         }
@@ -396,11 +396,14 @@ static OMProgressHUD *defaultView = nil;
 #pragma mark -- private method
 + (void)dismissInfo:(NSTimer *)timer{
     
-    UILabel *label = timer.userInfo;
-    [label removeFromSuperview];
-    if ([label.text isEqualToString:[OMProgressHUD defaultView].messageLabel.text]) {
-        [OMProgressHUD defaultView].messageLabel = nil;
-        [[OMProgressHUD defaultView] removeFromSuperview];
+    UIView *view = timer.userInfo;
+    [view removeFromSuperview];
+    if ([view isKindOfClass:[UILabel class]]) {
+        UILabel *label = (UILabel *)view;
+        if ([label.text isEqualToString:[OMProgressHUD defaultView].messageLabel.text]) {
+            [OMProgressHUD defaultView].messageLabel = nil;
+            [[OMProgressHUD defaultView] removeFromSuperview];
+        }
     }
     [timer invalidate];
     timer = nil;
@@ -507,6 +510,86 @@ static OMProgressHUD *defaultView = nil;
         [window addSubview:progressHUD];
         [progressHUD beginLoadAnimation:loadingImageView.layer];
     }
+}
+
+
+/**
+ 带图显示文本信息
+
+ @param text 文本信息
+ @param image 图片
+ @param size 图片的显示尺寸
+ */
++ (void)show:(NSString *)text image:(UIImage *)image imageSize:(CGSize)size{
+    
+    if (text.length > 0 && image == nil && CGSizeEqualToSize(size, CGSizeZero)) {
+        [OMProgressHUD show:text];
+        return;
+    }
+    
+    UIWindow *window = [[OMProgressHUD defaultView] frontWindow];
+    
+    if (!window) {
+        return;
+    }
+    
+    OMProgressHUD *progressHUD = [OMProgressHUD defaultView];
+    OMProgressConfig *config = [OMProgressConfig sharedInstance];
+    UIView *contentView = progressHUD.contentView;
+    contentView.hidden = NO;
+    
+    //计算背景宽度
+    UIEdgeInsets imageEdgeInset = config.tp_ImageEdgeInsets;
+    CGFloat contentW = imageEdgeInset.left + size.width + imageEdgeInset.right;
+    
+    //设置图片以及位置
+    UIImageView *imageView = progressHUD.loadingImageView;
+    imageView.image = image;
+    imageView.bounds = CGRectMake(0, 0, size.width, size.height);
+    imageView.center = CGPointMake(contentW * 0.5, imageEdgeInset.top + size.height * 0.5);
+    
+    //设置文本以及显示位置
+    if (text.length > 0 ) {
+        UILabel *textLabel = progressHUD.loadingTextLabel;
+        textLabel.text = text;
+        UIEdgeInsets textEdgeInset = config.tp_TextEdgeInsets;
+        CGFloat textMaxWidth = contentW - textEdgeInset.left - textEdgeInset.right;
+        CGSize textSize = [text sizeWithAttributes:@{NSFontAttributeName:textLabel.font}];
+        if (size.width > textMaxWidth) {
+            CGRect rect = [text boundingRectWithSize:CGSizeMake(textMaxWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:textLabel.font} context:nil];
+            textSize = rect.size;
+        }
+        textLabel.frame = CGRectMake(textEdgeInset.left, CGRectGetMaxY(imageView.frame) + imageEdgeInset.bottom + textEdgeInset.top, textMaxWidth, textSize.height);
+        
+        //此时显示图片以及文本
+        [contentView addSubview:imageView];
+        [contentView addSubview:textLabel];
+        
+        contentView.bounds = CGRectMake(0, 0, contentW, CGRectGetMaxY(textLabel.frame) + textEdgeInset.bottom);
+        contentView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width * 0.5, UIScreen.mainScreen.bounds.size.height * 0.5);
+        [window addSubview:contentView];
+        
+    }else{
+        
+        //如果没有传入文本，那么此时只显示图片，边距取imageEdgeInset上下左右中最大的值
+        CGFloat maxEdgeInset = (imageEdgeInset.left>imageEdgeInset.right)?imageEdgeInset.left:imageEdgeInset.right;
+        maxEdgeInset = maxEdgeInset > imageEdgeInset.top ?:imageEdgeInset.top;
+        maxEdgeInset = maxEdgeInset > imageEdgeInset.bottom ?:imageEdgeInset.bottom;
+        contentW = maxEdgeInset * 2 + size.width;
+        CGPointMake(contentW * 0.5, imageEdgeInset.top + size.height * 0.5);
+        
+        [contentView addSubview:imageView];
+        [window addSubview:contentView];
+        
+    }
+    
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(dismissInfo:) userInfo:contentView repeats:NO];
+    
+}
+
+
++ (void)showPicToast:(NSString *)text image:(UIImage *)image {
+    [OMProgressHUD show:text image:image imageSize:CGSizeMake(46, 46)];
 }
 
 

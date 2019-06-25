@@ -40,8 +40,11 @@ static OMProgressConfig *config = nil;
         _textCornerRadius = 6.0;
         _textEdgeInsets = UIEdgeInsetsMake(16, 10, 10, 16);
         
-        _position = OMProgressHudTextPositionMiddle;
+        _toastPosition = OMToastVerticalPositionCenter;
         _tailSpacing = 40;
+        
+        _tp_ImageEdgeInsets = UIEdgeInsetsMake(20, 37, 20, 37);
+        _tp_TextEdgeInsets = UIEdgeInsetsMake(0, 12, 18, 12);
         
         _loadingRate = 1.5;
         _loadingText = @"加载中...";

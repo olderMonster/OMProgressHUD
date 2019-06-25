@@ -11,10 +11,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 //显示文本时文本垂直方向位置(居上、居中、居下)
-typedef NS_ENUM(NSInteger , OMProgressHudTextPosition) {
-    OMProgressHudTextPositionTop,
-    OMProgressHudTextPositionMiddle,
-    OMProgressHudTextPositionBottom
+typedef NS_ENUM(NSInteger , OMToastVerticalPosition) {
+    OMToastVerticalPositionTop,
+    OMToastVerticalPositionCenter,
+    OMToastVerticalPositionBottom
 };
 
 @interface OMProgressConfig : NSObject
@@ -59,14 +59,28 @@ typedef NS_ENUM(NSInteger , OMProgressHudTextPosition) {
 /** 文本的边距，默认为(16,10,16,10) */
 @property (nonatomic , assign)UIEdgeInsets textEdgeInsets;
 
-/** 文本垂直方向位置,默认居中 */
-@property (nonatomic , assign)OMProgressHudTextPosition position;
+/** toast文本垂直方向位置,默认居中 */
+@property (nonatomic , assign)OMToastVerticalPosition toastPosition;
 
 /** 当position为居上或者居下的时候其距上或者距下的默认边距，默认为40； */
 @property (nonatomic , assign)CGFloat tailSpacing;
 
 /** loading动画一周持续时间，默认1.5 */
 @property (nonatomic , assign)CGFloat loadingRate;
+
+
+/**************************** 显示带图的toast信息 *******************************/
+
+/** 带图片显示toast图片的边距，默认为(20,37,20,37) */
+@property (nonatomic , assign)UIEdgeInsets tp_ImageEdgeInsets;
+
+/** 带图显示toast文本的边距，默认为(0,12,18,12) */
+@property (nonatomic , assign)UIEdgeInsets tp_TextEdgeInsets;
+
+/*******************************************************************************/
+
+
+
 
 + (instancetype)sharedInstance;
 
