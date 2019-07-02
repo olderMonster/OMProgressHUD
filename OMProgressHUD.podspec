@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "OMProgressHUD"
-  s.version      = "1.0.7"
+  s.version      = "2.0.0"
   s.summary      = "加载显示器"
 
   # This description is used to generate tags and improve search results.
@@ -105,7 +105,7 @@ Pod::Spec.new do |s|
   #  non-essential files like tests, examples and documentation.
   #
 
-  s.resource  = "OMProgressHUD/OMProgressHUD/*.png"
+  #s.resource  = "OMProgressHUD/OMProgressHUD/*.png"
   # s.resources = "Resources/*.png"
 
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
