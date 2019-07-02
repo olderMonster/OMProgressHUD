@@ -555,7 +555,7 @@ static OMProgressHUD *defaultView = nil;
         UIEdgeInsets textEdgeInset = config.tp_TextEdgeInsets;
         CGFloat textMaxWidth = contentW - textEdgeInset.left - textEdgeInset.right;
         CGSize textSize = [text sizeWithAttributes:@{NSFontAttributeName:textLabel.font}];
-        if (size.width > textMaxWidth) {
+        if (textSize.width > textMaxWidth) {
             CGRect rect = [text boundingRectWithSize:CGSizeMake(textMaxWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:textLabel.font} context:nil];
             textSize = rect.size;
         }

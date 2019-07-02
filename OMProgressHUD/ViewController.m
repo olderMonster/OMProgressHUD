@@ -104,7 +104,7 @@
     }
     
     if (indexPath.row == 8) {
-        [OMProgressHUD show:@"请求成功" image:[UIImage imageNamed:@"icon_success1"] imageSize:CGSizeMake(46, 46)];
+        [OMProgressHUD show:@"请求成功请求" image:[UIImage imageNamed:@"icon_success1"] imageSize:CGSizeMake(46, 46)];
     }
     
 }
