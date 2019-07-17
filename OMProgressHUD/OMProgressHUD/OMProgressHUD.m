@@ -108,10 +108,12 @@ static OMProgressHUD *defaultView = nil;
         progressHUD.messageLabel.text = nil;
         [progressHUD endLoadAnimation];
         [progressHUD removeFromSuperview];
+        [progressHUD.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        [progressHUD.contentView.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
         
-        if (progressHUD.messageLabel) {
-            [progressHUD.messageLabel removeFromSuperview];
-        }
+        [progressHUD.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        [progressHUD.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+
         
 //        if (progressHUD.ballViewsArray.count > 0) {
 //            for (UIView *view in progressHUD.ballViewsArray) {
@@ -478,6 +480,7 @@ static OMProgressHUD *defaultView = nil;
     [progressHUD addSubview:contentView];
     
     UIImageView *loadingImageView = progressHUD.loadingImageView;
+    loadingImageView.image = [OMProgressConfig sharedInstance].loadImage;
     UILabel *loadingTextLabel = progressHUD.loadingTextLabel;
     loadingTextLabel.text = loadingText;
     [contentView addSubview:loadingImageView];
