@@ -107,6 +107,12 @@
         [OMProgressHUD show:@"请求成功请求" image:[UIImage imageNamed:@"icon_success1"] imageSize:CGSizeMake(46, 46)];
     }
     
+    if (indexPath.row == 9) {
+        [OMProgressHUD show:@"123456"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [OMProgressHUD showImageLoading];
+        });
+    }
 }
 
 
@@ -132,7 +138,8 @@
                    @"toast(多行文本居中)",
                    @"toast(多行文本居上)",
                    @"toast(多行文本居下)",
-                   @"显示图片和文本"];
+                   @"显示图片和文本",
+                   @"先toast立马loading"];
     }
     return _array;
 }
