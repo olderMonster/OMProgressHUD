@@ -114,6 +114,8 @@ static OMProgressHUD *defaultView = nil;
         [progressHUD.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         [progressHUD.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
 
+        //因为label是单独加载window上的额，因此单独拿出来移除掉
+        [progressHUD.messageLabel removeFromSuperview];
         
 //        if (progressHUD.ballViewsArray.count > 0) {
 //            for (UIView *view in progressHUD.ballViewsArray) {
