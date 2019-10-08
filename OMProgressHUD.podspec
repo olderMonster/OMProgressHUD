@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "OMProgressHUD"
-  s.version      = "2.0.3"
+  s.version      = "2.0.4"
   s.summary      = "加载显示器"
 
   # This description is used to generate tags and improve search results.
@@ -55,7 +55,6 @@ Pod::Spec.new do |s|
 
   s.author             = { "印聪" => "406416312@qq.com" }
   # Or just: s.author    = "印聪"
-  # s.authors            = { "印聪" => "cong.yin@ttpai.cn" }
   # s.social_media_url   = "http://twitter.com/印聪"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
